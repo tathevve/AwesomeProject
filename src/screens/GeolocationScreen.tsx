@@ -1,54 +1,14 @@
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, Alert, Platform } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
-import { PermissionsAndroid } from 'react-native';
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import React from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+import useGeolocation from '../hooks/useGeolocation';
 
-const GeolocationScreen = () => {
-  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-
-  const checkPermission = async () => {
-    if (Platform.OS === 'android') {
-      return await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-    } else {
-      return (await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)) === RESULTS.GRANTED;
-    }
-  };
-
-  const requestPermission = async () => {
-    if (Platform.OS === 'android') {
-      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) return true;
-      if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-        Alert.alert('Permission Denied', 'Please enable location access in settings.');
-      }
-      return false;
-    } else {
-      return (await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)) === RESULTS.GRANTED;
-    }
-  };
-
-  const getLocation = async () => {
-    let hasPermission = await checkPermission();
-    if (!hasPermission) {
-      hasPermission = await requestPermission();
-      if (!hasPermission) return;
-    }
-
-    Geolocation.getCurrentPosition(
-      (position) => {
-        setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
-      },
-      (error) => {
-        Alert.alert('Error', error.message);
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    );
-  };
+const GeolocationScreen: React.FC = () => {
+  const { location, getLocation, loading, error } = useGeolocation();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Geolocation</Text>
+      {error && <Text style={styles.errorText}>{error}</Text>}
       {location ? (
         <View style={styles.locationBox}>
           <Text style={styles.locationText}>Latitude: {location.latitude}</Text>
@@ -57,7 +17,7 @@ const GeolocationScreen = () => {
       ) : (
         <Text style={styles.placeholder}>Your location will appear here.</Text>
       )}
-      <Button title="Get My Location" onPress={getLocation} />
+      <Button title={loading ? "Getting Location..." : "Get My Location"} onPress={getLocation} disabled={loading} />
     </View>
   );
 };
@@ -97,6 +57,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'gray',
     marginBottom: 20,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
   },
 });
 

@@ -7,9 +7,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LoginScreen from './src/screens/LoginScreen';
 import MessagingScreen from './src/screens/MessagingScreen';
 import GeolocationScreen from './src/screens/GeolocationScreen';
+import { AuthContext } from './src/context/authContext';
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+export const Stack = createStackNavigator();
 
 function PrivateTabs() {
   return (
@@ -24,7 +25,7 @@ function PrivateTabs() {
       }}
     >
       <Tab.Screen
-        name="Messaging"
+        name="Home"
         component={MessagingScreen}
         options={{
           tabBarLabel: 'Messaging',
@@ -42,14 +43,14 @@ function PrivateTabs() {
 }
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
         const token = await AsyncStorage.getItem('access_token');
         if (token) {
-          setIsLoggedIn(true);
+          setIsAuth(true);
         }
       } catch (error) {
         console.error('Error retrieving token:', error);
@@ -59,9 +60,10 @@ export default function App() {
   }, []);
 
   return (
+    <AuthContext.Provider value={{ isAuth, setIsAuth }}>
     <NavigationContainer>
       <Stack.Navigator>
-        {isLoggedIn ? (
+        {isAuth ? (
           <Stack.Screen
             name="PrivateTabs"
             component={PrivateTabs}
@@ -76,5 +78,6 @@ export default function App() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
+    </AuthContext.Provider>
   );
 }
