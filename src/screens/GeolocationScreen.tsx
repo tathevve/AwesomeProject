@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: 'lightgray',
   },
   title: {
     fontSize: 20,
@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   locationBox: {
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     padding: 15,
     borderRadius: 10,
-    shadowColor: '#000',
+    shadowColor: 'black',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 16,
-    color: '#333',
+    color: 'darkgray',
     fontWeight: 'bold',
   },
   placeholder: {

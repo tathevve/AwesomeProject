@@ -21,16 +21,10 @@ const useGeolocation = () => {
   const requestPermission = async () => {
     if (Platform.OS === 'android') {
       const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) return true;
-      if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-        Alert.alert('Permission Denied', 'Please enable location access in settings.');
-      }
-      return false;
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
     } else {
       const status = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-      if (status === RESULTS.GRANTED || status === RESULTS.LIMITED) {
-        return true;
-      }
+      if (status === RESULTS.GRANTED || status === RESULTS.LIMITED) return true;
       if (status === RESULTS.DENIED) {
         const alwaysStatus = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
         return alwaysStatus === RESULTS.GRANTED || alwaysStatus === RESULTS.LIMITED;
@@ -49,6 +43,7 @@ const useGeolocation = () => {
       hasPermission = await requestPermission();
       if (!hasPermission) {
         setLoading(false);
+        setError('Permission denied. Please enable location access in settings.');
         return;
       }
     }
@@ -62,7 +57,7 @@ const useGeolocation = () => {
         setLoading(false);
       },
       (error) => {
-        setError(error.message);
+        setError(`Error getting location: ${error.message}`);
         setLoading(false);
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }

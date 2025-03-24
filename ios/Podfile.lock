@@ -5,6 +5,12 @@ PODS:
   - FBLazyVector (0.78.0)
   - fmt (11.0.2)
   - glog (0.3.5)
+  - Permission-LocationAccuracy (0.0.1):
+    - React-Core
+  - Permission-LocationAlways (0.0.1):
+    - React-Core
+  - Permission-LocationWhenInUse (0.0.1):
+    - React-Core
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -1589,7 +1595,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNPermissions (5.3.0):
+  - RNPermissions (5.0.0):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.11.18.00)
@@ -1795,6 +1801,9 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - Permission-LocationAccuracy (from `../node_modules/react-native-permissions/ios/LocationAccuracy`)
+  - Permission-LocationAlways (from `../node_modules/react-native-permissions/ios/LocationAlways`)
+  - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -1882,6 +1891,12 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/fmt.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  Permission-LocationAccuracy:
+    :path: "../node_modules/react-native-permissions/ios/LocationAccuracy"
+  Permission-LocationAlways:
+    :path: "../node_modules/react-native-permissions/ios/LocationAlways"
+  Permission-LocationWhenInUse:
+    :path: "../node_modules/react-native-permissions/ios/LocationWhenInUse"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -2022,6 +2037,9 @@ SPEC CHECKSUMS:
   FBLazyVector: 6fe148afcef2e3213e484758e3459609d40d57f5
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
+  Permission-LocationAccuracy: 8abdc4f48ca0eb07e3aed112095720dea8e2a0d6
+  Permission-LocationAlways: 53071fa3b0e542203f8f68e5953a608d1961bab7
+  Permission-LocationWhenInUse: 9972c06e2c119376d6c5a12613dfd4173ff23e46
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: b2eecf2d60216df56bc5e6be5f063826d3c1ee35
   RCTRequired: 78522de7dc73b81f3ed7890d145fa341f5bb32ea
@@ -2083,13 +2101,13 @@ SPEC CHECKSUMS:
   ReactCommon: 037aef9f8fbed630d895c09b5c69e80f2ea2e67e
   RNCAsyncStorage: f87e7905ae8a3ee95a69f4bd7046fcaaf8e46f13
   RNGestureHandler: 5efafa1473ccab9c4530bb7310032b784ecc84a6
-  RNPermissions: ddf6ce0d8bf47207f22956d7abb2293a2cffa781
+  RNPermissions: 917e5a9820216f28458cb789b848fd9c86843845
   RNReanimated: d593b8c342ff962f43b58baa300e2b4442a087ec
   RNScreens: e6ecd267507f939d7b79c6fe079f315d1735ab3e
   RNVectorIcons: 3bcc7d69519bcac82308d2464579c4203a451c28
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: afd04ff05ebe0121a00c468a8a3c8080221cb14c
 
-PODFILE CHECKSUM: fd34267081c3efd6dac23315f9be8b652edf71b4
+PODFILE CHECKSUM: 5c45589efde080e778072706748d3d52ccc481a3
 
 COCOAPODS: 1.16.2

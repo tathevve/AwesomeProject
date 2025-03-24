@@ -92,7 +92,7 @@ const Messaging = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'lightgray',
     padding: 10,
   },
   header: {
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   sentMessage: {
-    backgroundColor: '#00796B',
+    backgroundColor: 'teal',
     alignSelf: 'flex-end',
   },
   receivedMessage: {
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   messageText: {
-    color: '#FFF',
+    color: 'white',
     fontSize: 16,
     fontWeight: '500',
   },
@@ -134,10 +134,10 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 45,
     borderWidth: 1,
-    borderColor: '#BDBDBD',
+    borderColor: 'silver',
     borderRadius: 20,
     paddingHorizontal: 15,
-    backgroundColor: '#FFF',
+    backgroundColor: 'white',
     marginRight: 10,
     fontSize: 16,
   },
