@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, NativeModules, ScrollView } from 'react-native';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { useAuthContext } from '../context/authContext';
@@ -15,7 +15,8 @@ const Messaging = () => {
   const navigation = useNavigation();
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<MessageType[]>([]);
-    const {setIsAuth} = useAuthContext();
+  const { setIsAuth } = useAuthContext();
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
@@ -29,16 +30,26 @@ const Messaging = () => {
         updatedMessages[updatedMessages.length - 1].response = response;
         return updatedMessages;
       });
+
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 100);
     });
 
     setMessage('');
+
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
   };
 
   const handleLogout = async () => {
     try {
-    await AsyncStorage.removeItem('access_token');
-    setIsAuth(false);
-    setTimeout(() => { navigation.dispatch(StackActions.replace('LoginScreen')) }, 500);
+      await AsyncStorage.removeItem('access_token');
+      setIsAuth(false);
+      setTimeout(() => {
+        navigation.dispatch(StackActions.replace('LoginScreen'));
+      }, 500);
     } catch (e) {
       console.log('Error logging out, please try again later');
     }
@@ -46,7 +57,11 @@ const Messaging = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.chatContainer}>
+      <View style={styles.header}>
+        <Button title="Logout" onPress={handleLogout} color="#D32F2F" />
+      </View>
+
+      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.chatContainer}>
         {messages.map((msg, index) => (
           <View key={index}>
             <View style={[styles.messageBubble, styles.sentMessage]}>
@@ -70,7 +85,6 @@ const Messaging = () => {
         />
         <Button title="Send Message" onPress={handleSendMessage} color="#00796B" />
       </View>
-      <Button title="Logout" onPress={handleLogout} color="#D32F2F" />
     </View>
   );
 };
@@ -80,6 +94,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
     padding: 10,
+  },
+  header: {
+    alignItems: 'flex-end',
+    paddingBottom: 10,
   },
   chatContainer: {
     flexGrow: 1,
