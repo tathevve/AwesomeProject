@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { 
-  View, 
-  TextInput, 
-  TouchableOpacity, 
-  Text, 
-  StyleSheet, 
-  Keyboard, 
-  TouchableWithoutFeedback 
+import React, {useState} from 'react';
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import {useNavigation, NavigationProp} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuthContext } from '../context/authContext';
+import {useAuthContext} from '../context/authContext';
 
 type RootStackParamList = {
   PrivateTabs: {
     screen: string;
-    params?: { screen: string };
+    params?: {screen: string};
   };
 };
 
@@ -23,9 +23,10 @@ export default function LoginScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const { setIsAuth } = useAuthContext();
+  const {setIsAuth} = useAuthContext();
 
-  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleLogin = async () => {
     if (!email) {
@@ -45,7 +46,7 @@ export default function LoginScreen() {
       setTimeout(() => {
         navigation.navigate('PrivateTabs', {
           screen: 'Home',
-          params: { screen: 'MessagingScreen' },
+          params: {screen: 'MessagingScreen'},
         });
       }, 500);
     } catch (error) {
@@ -60,7 +61,7 @@ export default function LoginScreen() {
         <TextInput
           placeholder="Enter Email"
           value={email}
-          onChangeText={(text) => {
+          onChangeText={text => {
             setEmail(text);
             setError('');
           }}

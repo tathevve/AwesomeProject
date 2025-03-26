@@ -1,4 +1,4 @@
-package com.awesomeproject.MyDevice
+package com.awesomeproject.Messages
 
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -6,10 +6,10 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Callback
 import org.json.JSONObject
 
-class MyDeviceInfoPackage(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class MessagingInfoPackage(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
-        return "MyDeviceInfoPackage"
+        return "MessagingInfoPackage"
     }
 
     @ReactMethod

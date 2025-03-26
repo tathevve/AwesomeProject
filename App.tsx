@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import React, {useState, useEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import LoginScreen from './src/screens/LoginScreen';
 import MessagingScreen from './src/screens/MessagingScreen';
 import GeolocationScreen from './src/screens/GeolocationScreen';
-import { AuthContext } from './src/context/authContext';
+import {AuthContext} from './src/context/authContext';
 
 const Tab = createBottomTabNavigator();
 export const Stack = createStackNavigator();
@@ -18,12 +18,11 @@ function PrivateTabs() {
       screenOptions={{
         tabBarActiveTintColor: '#00796B',
         tabBarInactiveTintColor: 'gray',
-        tabBarLabelStyle: { fontSize: 16, fontWeight: 'bold', marginTop: 5 },
-        tabBarStyle: { backgroundColor: '#FFFFFF' },
+        tabBarLabelStyle: {fontSize: 16, fontWeight: 'bold', marginTop: 5},
+        tabBarStyle: {backgroundColor: '#FFFFFF'},
         tabBarShowLabel: true,
-        tabBarIconStyle: { display: 'none' },
-      }}
-    >
+        tabBarIconStyle: {display: 'none'},
+      }}>
       <Tab.Screen
         name="Home"
         component={MessagingScreen}
@@ -60,24 +59,24 @@ export default function App() {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuth, setIsAuth }}>
-    <NavigationContainer>
-      <Stack.Navigator>
-        {isAuth ? (
-          <Stack.Screen
-            name="PrivateTabs"
-            component={PrivateTabs}
-            options={{ headerShown: false }}
-          />
-        ) : (
-          <Stack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <AuthContext.Provider value={{isAuth, setIsAuth}}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {isAuth ? (
+            <Stack.Screen
+              name="PrivateTabs"
+              component={PrivateTabs}
+              options={{headerShown: false}}
+            />
+          ) : (
+            <Stack.Screen
+              name="LoginScreen"
+              component={LoginScreen}
+              options={{headerShown: false}}
+            />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
     </AuthContext.Provider>
   );
 }

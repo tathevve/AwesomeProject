@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import {View, Text, Button, StyleSheet} from 'react-native';
 import useGeolocation from '../hooks/useGeolocation';
 
 const GeolocationScreen: React.FC = () => {
-  const { location, getLocation, loading, error } = useGeolocation();
+  const {location, getLocation, loading, error} = useGeolocation();
 
   return (
     <View style={styles.container}>
@@ -12,12 +12,18 @@ const GeolocationScreen: React.FC = () => {
       {location ? (
         <View style={styles.locationBox}>
           <Text style={styles.locationText}>Latitude: {location.latitude}</Text>
-          <Text style={styles.locationText}>Longitude: {location.longitude}</Text>
+          <Text style={styles.locationText}>
+            Longitude: {location.longitude}
+          </Text>
         </View>
       ) : (
         <Text style={styles.placeholder}>Your location will appear here.</Text>
       )}
-      <Button title={loading ? "Getting Location..." : "Get My Location"} onPress={getLocation} disabled={loading} />
+      <Button
+        title={loading ? 'Getting Location...' : 'Get My Location'}
+        onPress={getLocation}
+        disabled={loading}
+      />
     </View>
   );
 };
@@ -40,7 +46,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,

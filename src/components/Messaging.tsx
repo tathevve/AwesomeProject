@@ -1,8 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, NativeModules, ScrollView, Platform } from 'react-native';
-import { StackActions, useNavigation } from '@react-navigation/native';
-import { useAuthContext } from '../context/authContext';
+import React, {useState, useRef} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  NativeModules,
+  ScrollView,
+  Platform,
+} from 'react-native';
+import {StackActions, useNavigation} from '@react-navigation/native';
+import {useAuthContext} from '../context/authContext';
 
 type MessageType = {
   sent: string;
@@ -14,50 +23,49 @@ const Messaging = () => {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const { setIsAuth } = useAuthContext();
+  const {setIsAuth} = useAuthContext();
   const navigation = useNavigation();
 
   const fetchResponseFromNative = async (text: string) => {
     try {
-      if (Platform.OS === 'android') { 
-        NativeModules.MyDeviceInfoPackage.sendMessage(text, (response: string) => {
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages];
-            updatedMessages[updatedMessages.length - 1].response = response;
-            return updatedMessages;
-          });
-          setTimeout(() => {
-            scrollViewRef.current?.scrollToEnd({ animated: true });
-          }, 100);
+      let response = '';
+
+      if (Platform.OS === 'android') {
+        NativeModules.MessagingInfoPackage.sendMessage(text, (res: string) => {
+          updateLastMessage(res);
         });
       } else {
-        await NativeModules.MessagingInfo.getSentMessage(text);
-
-        setMessages((prevMessages) => {
-          const updatedMessages = [...prevMessages];
-          updatedMessages[updatedMessages.length - 1].response = `Received "${text}" from native module`;
-          return updatedMessages;
-        });
-
-        setTimeout(() => {
-          scrollViewRef.current?.scrollToEnd({ animated: true });
-        }, 100);
+        const result = await NativeModules.MessagingInfo.getSentMessage(text);
+        response = result.response;
+        updateLastMessage(response);
       }
     } catch (error) {
       console.log('Error fetching response from native:', error);
     }
   };
 
-  const handleSendMessage = () => {
-    if (!message.trim()) return;
+  const updateLastMessage = (response: string) => {
+    setMessages(prevMessages => {
+      const updatedMessages = [...prevMessages];
+      updatedMessages[updatedMessages.length - 1].response = response;
+      return updatedMessages;
+    });
 
-    const newMessage = { sent: message, response: '' };
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({animated: true});
+    }, 100);
+  };
+
+  const handleSendMessage = () => {
+    if (!message.trim()) {return;}
+
+    const newMessage = {sent: message, response: ''};
+    setMessages(prevMessages => [...prevMessages, newMessage]);
 
     fetchResponseFromNative(message);
     setMessage('');
     setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd({ animated: true });
+      scrollViewRef.current?.scrollToEnd({animated: true});
     }, 100);
   };
 
@@ -79,7 +87,9 @@ const Messaging = () => {
         <Button title="Logout" onPress={handleLogout} color="#D32F2F" />
       </View>
 
-      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.chatContainer}>
+      <ScrollView
+        ref={scrollViewRef}
+        contentContainerStyle={styles.chatContainer}>
         {messages.map((msg, index) => (
           <View key={index}>
             {msg.sent && (
@@ -87,11 +97,11 @@ const Messaging = () => {
                 <Text style={styles.messageText}>{msg.sent}</Text>
               </View>
             )}
-            {msg.response ? (
+            {msg.response && (
               <View style={[styles.messageBubble, styles.receivedMessage]}>
                 <Text style={styles.messageText}>{msg.response}</Text>
               </View>
-            ) : null}
+            )}
           </View>
         ))}
       </ScrollView>
@@ -104,7 +114,11 @@ const Messaging = () => {
           value={message}
           onChangeText={setMessage}
         />
-        <Button title="Send Message" onPress={handleSendMessage} color="#00796B" />
+        <Button
+          title="Send Message"
+          onPress={handleSendMessage}
+          color="#00796B"
+        />
       </View>
     </View>
   );
