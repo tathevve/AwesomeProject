@@ -2,9 +2,9 @@
 #import "React/RCTBridgeModule.h"
 #import "React/RCTEventEmitter.h"
 
-@interface RCT_EXTERN_MODULE(MyDeviceInfo, NSObject)
+@interface RCT_EXTERN_MODULE(MessagingInfo, NSObject)
 
-RCT_EXTERN_METHOD(getDeviceInfo:(NSString *)message
+RCT_EXTERN_METHOD(getSentMessage:(NSString *)message
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
 

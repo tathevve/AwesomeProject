@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, NativeModules, ScrollView, Platform } from 'react-native';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { useAuthContext } from '../context/authContext';
@@ -31,14 +31,14 @@ const Messaging = () => {
           }, 100);
         });
       } else {
-        const response = await NativeModules.MyDeviceInfo.getDeviceInfo(text);
-        
+        await NativeModules.MessagingInfo.getSentMessage(text);
+
         setMessages((prevMessages) => {
           const updatedMessages = [...prevMessages];
           updatedMessages[updatedMessages.length - 1].response = `Received "${text}" from native module`;
           return updatedMessages;
         });
-  
+
         setTimeout(() => {
           scrollViewRef.current?.scrollToEnd({ animated: true });
         }, 100);
@@ -47,13 +47,13 @@ const Messaging = () => {
       console.log('Error fetching response from native:', error);
     }
   };
-  
+
   const handleSendMessage = () => {
     if (!message.trim()) return;
-  
+
     const newMessage = { sent: message, response: '' };
     setMessages((prevMessages) => [...prevMessages, newMessage]);
-  
+
     fetchResponseFromNative(message);
     setMessage('');
     setTimeout(() => {
