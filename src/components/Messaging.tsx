@@ -1,10 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, NativeModules, ScrollView } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, NativeModules, ScrollView, Platform } from 'react-native';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { useAuthContext } from '../context/authContext';
-
-const { MyDeviceInfoPackage } = NativeModules;
 
 type MessageType = {
   sent: string;
@@ -12,32 +10,52 @@ type MessageType = {
 };
 
 const Messaging = () => {
-  const navigation = useNavigation();
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<MessageType[]>([]);
-  const { setIsAuth } = useAuthContext();
   const scrollViewRef = useRef<ScrollView>(null);
 
+  const { setIsAuth } = useAuthContext();
+  const navigation = useNavigation();
+
+  const fetchResponseFromNative = async (text: string) => {
+    try {
+      if (Platform.OS === 'android') { 
+        NativeModules.MyDeviceInfoPackage.sendMessage(text, (response: string) => {
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages];
+            updatedMessages[updatedMessages.length - 1].response = response;
+            return updatedMessages;
+          });
+          setTimeout(() => {
+            scrollViewRef.current?.scrollToEnd({ animated: true });
+          }, 100);
+        });
+      } else {
+        const response = await NativeModules.MyDeviceInfo.getDeviceInfo(text);
+        
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages];
+          updatedMessages[updatedMessages.length - 1].response = `Received "${text}" from native module`;
+          return updatedMessages;
+        });
+  
+        setTimeout(() => {
+          scrollViewRef.current?.scrollToEnd({ animated: true });
+        }, 100);
+      }
+    } catch (error) {
+      console.log('Error fetching response from native:', error);
+    }
+  };
+  
   const handleSendMessage = () => {
     if (!message.trim()) return;
-
+  
     const newMessage = { sent: message, response: '' };
     setMessages((prevMessages) => [...prevMessages, newMessage]);
-
-    MyDeviceInfoPackage.sendMessage(message, (response: string) => {
-      setMessages((prevMessages) => {
-        const updatedMessages = [...prevMessages];
-        updatedMessages[updatedMessages.length - 1].response = response;
-        return updatedMessages;
-      });
-
-      setTimeout(() => {
-        scrollViewRef.current?.scrollToEnd({ animated: true });
-      }, 100);
-    });
-
+  
+    fetchResponseFromNative(message);
     setMessage('');
-
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
@@ -64,17 +82,20 @@ const Messaging = () => {
       <ScrollView ref={scrollViewRef} contentContainerStyle={styles.chatContainer}>
         {messages.map((msg, index) => (
           <View key={index}>
-            <View style={[styles.messageBubble, styles.sentMessage]}>
-              <Text style={styles.messageText}>{msg.sent}</Text>
-            </View>
-            {msg.response && (
+            {msg.sent && (
+              <View style={[styles.messageBubble, styles.sentMessage]}>
+                <Text style={styles.messageText}>{msg.sent}</Text>
+              </View>
+            )}
+            {msg.response ? (
               <View style={[styles.messageBubble, styles.receivedMessage]}>
                 <Text style={styles.messageText}>{msg.response}</Text>
               </View>
-            )}
+            ) : null}
           </View>
         ))}
       </ScrollView>
+
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
