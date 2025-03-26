@@ -57,7 +57,9 @@ const Messaging = () => {
   };
 
   const handleSendMessage = () => {
-    if (!message.trim()) {return;}
+    if (!message.trim()) {
+      return;
+    }
 
     const newMessage = {sent: message, response: ''};
     setMessages(prevMessages => [...prevMessages, newMessage]);

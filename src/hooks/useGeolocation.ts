@@ -31,7 +31,9 @@ const useGeolocation = () => {
       return granted === PermissionsAndroid.RESULTS.GRANTED;
     } else {
       const status = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-      if (status === RESULTS.GRANTED || status === RESULTS.LIMITED) {return true;}
+      if (status === RESULTS.GRANTED || status === RESULTS.LIMITED) {
+        return true;
+      }
       if (status === RESULTS.DENIED) {
         const alwaysStatus = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
         return (
