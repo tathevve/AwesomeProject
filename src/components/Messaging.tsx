@@ -22,14 +22,12 @@ const Messaging = () => {
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<MessageType[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
-
   const {setIsAuth} = useAuthContext();
   const navigation = useNavigation();
 
   const fetchResponseFromNative = async (text: string) => {
     try {
       let response = '';
-
       if (Platform.OS === 'android') {
         NativeModules.MessagingInfoPackage.sendMessage(text, (res: string) => {
           updateLastMessage(res);
@@ -50,10 +48,6 @@ const Messaging = () => {
       updatedMessages[updatedMessages.length - 1].response = response;
       return updatedMessages;
     });
-
-    setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd({animated: true});
-    }, 100);
   };
 
   const handleSendMessage = () => {
@@ -66,9 +60,6 @@ const Messaging = () => {
 
     fetchResponseFromNative(message);
     setMessage('');
-    setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd({animated: true});
-    }, 100);
   };
 
   const handleLogout = async () => {
@@ -91,7 +82,10 @@ const Messaging = () => {
 
       <ScrollView
         ref={scrollViewRef}
-        contentContainerStyle={styles.chatContainer}>
+        contentContainerStyle={styles.chatContainer}
+        onContentSizeChange={() => {
+          scrollViewRef.current?.scrollToEnd({animated: true});
+        }}>
         {messages.map((msg, index) => (
           <View key={index}>
             {msg.sent && (

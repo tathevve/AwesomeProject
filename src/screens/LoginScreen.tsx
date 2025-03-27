@@ -25,8 +25,8 @@ export default function LoginScreen() {
   const [error, setError] = useState<string>('');
   const {setIsAuth} = useAuthContext();
 
-  const validateEmail = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateEmail = (emailInput: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput);
 
   const handleLogin = async () => {
     if (!email) {
@@ -49,8 +49,8 @@ export default function LoginScreen() {
           params: {screen: 'MessagingScreen'},
         });
       }, 500);
-    } catch (error) {
-      console.error('Error saving token to AsyncStorage:', error);
+    } catch (storageError) {
+      console.error('Error saving token to AsyncStorage:', storageError);
     }
   };
 
@@ -69,7 +69,6 @@ export default function LoginScreen() {
           keyboardType="email-address"
           autoCapitalize="none"
           returnKeyType="done"
-          blurOnSubmit={true}
         />
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
         <TouchableOpacity style={styles.button} onPress={handleLogin}>

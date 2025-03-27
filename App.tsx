@@ -5,9 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import LoginScreen from './src/screens/LoginScreen';
-import MessagingScreen from './src/screens/MessagingScreen';
 import GeolocationScreen from './src/screens/GeolocationScreen';
 import {AuthContext} from './src/context/authContext';
+import Messaging from './src/components/Messaging';
 
 const Tab = createBottomTabNavigator();
 export const Stack = createStackNavigator();
@@ -25,7 +25,7 @@ function PrivateTabs() {
       }}>
       <Tab.Screen
         name="Home"
-        component={MessagingScreen}
+        component={Messaging}
         options={{
           tabBarLabel: 'Messaging',
         }}
